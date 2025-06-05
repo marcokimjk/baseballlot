@@ -1,28 +1,3 @@
-import json
-from selenium import webdriver
-from bs4 import BeautifulSoup
-from datetime import datetime
-
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')
-driver = webdriver.Chrome(options=options)
-
-today = datetime.now().strftime("%Y%m%d")
-url = f"https://sports.news.naver.com/kbaseball/schedule/index?date={today}"
-
-driver.get(url)
-soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-games = soup.select('.sch_tb tbody tr')
-lotte_games = []
-
-for game in games:
-    teams = game.select_one('.team')
-    if teams and "롯데" in game.text:
-        lotte_games.append(game.text.strip())
-
-driver.quit()
-
-# 결과를 JSON 파일로 저장
-with open("lotte_today.json", "w", encoding="utf-8") as f:
-    json.dump(lotte_games, f, ensure_ascii=False, indent=2)
+[
+  "2025-06-05 | vs LG 트윈스 | 18:30 | 사직구장"
+]
