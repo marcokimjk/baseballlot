@@ -1,0 +1,37 @@
+name: Update Lotte Game JSON
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # 매일 오전 1시 KST (UTC 기준 4시)
+  workflow_dispatch:
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 저장소 체크아웃
+      uses: actions/checkout@v3
+
+    - name: Python 셋업
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Chrome 설치
+      uses: browser-actions/setup-chrome@latest
+
+    - name: 의존성 설치
+      run: |
+        pip install selenium beautifulsoup4
+
+    - name: JSON 생성 실행
+      run: python get_lotte_schedule.py
+
+    - name: 변경 커밋 & 푸시
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'actions@github.com'
+        git add lotte_today.json
+        git commit -m 'Update lotte_today.json' || echo "No changes"
+        git push
