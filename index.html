@@ -1,0 +1,14 @@
+<script>
+fetch('https://yourdomain.github.io/lotte_today.json')
+  .then(res => res.json())
+  .then(data => {
+    const box = document.getElementById('lotte-game');
+    if (data && data.length) {
+      box.innerHTML = `<strong>오늘의 경기:</strong><br>${data.join("<br>")}`;
+    } else {
+      box.textContent = "오늘은 롯데 경기가 없습니다.";
+    }
+  });
+</script>
+
+<div id="lotte-game">로딩 중...</div>
