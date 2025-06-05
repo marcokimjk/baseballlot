@@ -1,8 +1,8 @@
 <script>
-fetch('https://yourdomain.github.io/lotte_today.json')
+fetch('https://marcokimjk.github.io/baseballlot/lotte_today.json')
   .then(res => res.json())
   .then(data => {
-    const box = document.getElementById('lotte-game');
+    const box = document.getElementById('baseballlot');
     if (data && data.length) {
       box.innerHTML = `<strong>오늘의 경기:</strong><br>${data.join("<br>")}`;
     } else {
