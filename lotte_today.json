@@ -1,0 +1,35 @@
+from selenium import webdriver
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+# 크롬 드라이버 설정
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+driver = webdriver.Chrome(options=options)
+
+# 오늘 날짜 형식: 20250605
+today = datetime.now().strftime("%Y%m%d")
+url = f"https://sports.news.naver.com/kbaseball/schedule/index?date={today}"
+
+driver.get(url)
+soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+# 경기 일정 영역 찾기
+games = soup.select('.sch_tb tbody tr')
+
+lotte_games = []
+
+for game in games:
+    teams = game.select_one('.team')
+    if teams and "롯데" in game.text:
+        lotte_games.append(game.text.strip())
+
+driver.quit()
+
+# 결과 출력
+if lotte_games:
+    print("오늘 롯데 자이언츠 경기:")
+    for g in lotte_games:
+        print(g)
+else:
+    print("오늘은 롯데 경기가 없습니다.")
